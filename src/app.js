@@ -10,12 +10,13 @@ const app = express();
 app.use(express.json());
 
 // register route
+
 app.use("/api/users", userRoutes);
 app.use("/api/tenants", tenantRoutes);
 app.use("/api/customers", customerRoutes);
 
 app.get("/", (req, res) => {
-  res.send("API Running...");
+  res.send("check the manual deployment");
 });
 
 export default app;

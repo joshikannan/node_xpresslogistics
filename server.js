@@ -12,7 +12,7 @@ const startServer = async () => {
   try {
     // connect database first
     await connectDB();
-    app.listen(PORT, () => {
+    app.listen(PORT, "0.0.0.0", () => {
       console.log(`🚀 Server running on port ${PORT}`);
     });
   } catch (error) {
@@ -20,5 +20,8 @@ const startServer = async () => {
     process.exit(1);
   }
 };
-
 startServer();
+
+// Using app.listen(PORT, "0.0.0.0") is safe and recommended in production.
+// It ensures the application is accessible from external networks, especially in cloud and container environments.
+// Security concerns are handled separately through authentication, firewalls, and network configurations.

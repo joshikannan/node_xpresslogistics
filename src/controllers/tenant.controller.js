@@ -1,11 +1,24 @@
-import tenantService from "../services/tenant.service.js";
+import { getNextSequence } from "../helperFunctions/getNextSequence.js";
+import Tenant from "../models/tenant.model.js";
 
 const createTenant = async (req, res) => {
   try {
-    const tenant = await tenantService.createTenant(
-      req.body,
-      req.user?._id, // later from auth
-    );
+    const data = req.body;
+    // 🔍 check duplicate email
+    const existing = await Tenant.findOne({ email: data.email });
+    if (existing) {
+      throw new Error("Tenant already exists");
+    }
+    // 🔥 generate sequence number
+    const seq = await getNextSequence("tenantId");
+
+    // 🔥 format TEN-001
+    const tenantId = `TEN-${String(seq).padStart(3, "0")}`;
+
+    const tenant = await Tenant.create({
+      ...data,
+      tenantId,
+    });
 
     res.status(201).json({
       success: true,
@@ -21,7 +34,7 @@ const createTenant = async (req, res) => {
 
 const getAllTenants = async (req, res) => {
   try {
-    const tenants = await tenantService.getAllTenants();
+    const tenants = await Tenant.find().sort({ createdAt: -1 });
 
     res.status(200).json({
       success: true,
