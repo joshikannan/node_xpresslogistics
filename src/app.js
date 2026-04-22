@@ -16,7 +16,7 @@ app.use("/api/tenants", tenantRoutes);
 app.use("/api/customers", customerRoutes);
 
 app.get("/", (req, res) => {
-  res.send("check the auto deployment");
+  res.send("Testing auto deploy CI / CD ");
 });
 
 export default app;
